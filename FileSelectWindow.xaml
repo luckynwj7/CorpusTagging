@@ -1,0 +1,29 @@
+﻿<Window x:Class="CorpusTagging.FileSelectWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CorpusTagging"
+        mc:Ignorable="d"
+        Title="Corpus Tagging" Height="400" Width="520"
+        Closing="Window_Closing">
+    <StackPanel Margin="20,25,20,20">
+        <TextBlock Text="Corpus Tagging" FontSize="50" Margin="30,20,30,30" TextAlignment="Center"></TextBlock>
+        <StackPanel Orientation="Horizontal" Margin="10">
+            <TextBlock Text="저장 파일 선택   " Width="160" TextAlignment="Right"></TextBlock>
+            <Border BorderThickness="1" BorderBrush="Black">
+                <TextBlock Width="200" x:Name="saveCsvFileTxtBlock"></TextBlock>
+            </Border>
+            <Button x:Name="findSaveCsvFileBtn" Click="findSaveCsvFileBtn_Click">파일 찾기</Button>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Right">
+            <Button Width="200" Height="30" x:Name="createCsvFileBtn" Click="createCsvFileBtn_Click">새로운 저장파일(csv) 생성</Button>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="10,20,10,10" HorizontalAlignment="Center">
+            <Button Padding="10" Margin="10" Width="150" x:Name="currentFileCheckBtn" Click="currentFileCheckBtn_Click">작업 시작</Button>
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Right" Margin="0,30,0,0">
+            <TextBlock>문의 : 멀티플랫폼 오피스팀 노원종</TextBlock>
+        </StackPanel>
+    </StackPanel>
+</Window>
