@@ -57,6 +57,7 @@ namespace CorpusTagging
             App.TaggingJobWin.corpusListSt.Children.Insert(insertPosition + flagPrevNext, inputTxtObj);
             App.TaggingJobWin.TextList.Insert(insertPosition + flagPrevNext, inputTxtObj);
             App.TaggingJobWin.InputTextEvent(inputTxtObj);
+            insertTextTxtBox.Text = "";
             this.Hide();
         }
 

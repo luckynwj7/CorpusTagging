@@ -34,6 +34,7 @@ namespace CorpusTagging
         private string saveFileText;
         private string selectedFileIndex;
         private int selectTextIndex;
+        private int sentenceCount;
 
         private TaggingJobWindow(string saveFilePath)
         {
@@ -49,6 +50,8 @@ namespace CorpusTagging
             }
             startSentenceBtn.Background = Brushes.Yellow;
             startSentenceBtn.IsChecked = false;
+
+            sentenceCount = 0;
         }
         public static TaggingJobWindow GetTaggingJobWin(string saveFilePath)
         {
@@ -81,6 +84,7 @@ namespace CorpusTagging
         private void selectOtherFileBtn_Click(object sender, RoutedEventArgs e)
         {
             this.Hide();
+            this.corpusListSt.Children.Clear();
             App.FileSelectWin.Show();
         }
 
@@ -443,7 +447,7 @@ namespace CorpusTagging
         {
             if (startSentenceBtn.IsChecked == true)
             {
-                //txtObj.SentenceName = txtObj.RealText;
+                SentenceAdd(txtObj);
             }
             InitializeToggleButton();
             txtObj.TagText = submitMode;
@@ -454,6 +458,17 @@ namespace CorpusTagging
             // 문장시작 초기화
             startSentenceBtn.Background = Brushes.Yellow;
             startSentenceBtn.IsChecked = false;
+        }
+
+        private void SentenceAdd(TextListObject txtObj)
+        {
+            int txtObjIndex = corpusListSt.Children.IndexOf(txtObj);
+            for(int indexNum = txtObjIndex; indexNum < corpusListSt.Children.Count; indexNum++)
+            {
+                (corpusListSt.Children[indexNum] as TextListObject).SentenceName = "sent_" + sentenceCount;
+                corpusListCombo.ItemsSource = taggingJobWin.corpusComboList;
+            }
+            sentenceCount++;
         }
         
         private void ShowingTextUpdate(TextListObject txtObj)
