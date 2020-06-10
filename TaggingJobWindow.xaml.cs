@@ -24,6 +24,10 @@ namespace CorpusTagging
     {
         private static TaggingJobWindow taggingJobWin;
         private List<TextListObject> textList;
+        public List<TextListObject> TextList
+        {
+            get { return textList; }
+        }
         private List<ComboBoxItem> corpusComboList;
         private List<ToggleButton> tagTogBtnList;
         private string saveFilePath;
@@ -51,6 +55,7 @@ namespace CorpusTagging
             {
                 taggingJobWin = new TaggingJobWindow(saveFilePath);
             }
+            taggingJobWin.selectTextIndex = 0;
             taggingJobWin.saveFilePath = saveFilePath;
             taggingJobWin.saveFileText = File.ReadAllText(saveFilePath, Encoding.GetEncoding("euc-kr"));
 
@@ -87,9 +92,9 @@ namespace CorpusTagging
             //string textContent = File.ReadAllText(textFilePath, Encoding.GetEncoding("euc-kr"));
             string textContent = File.ReadAllText(textFilePath);
             string corpusName = FindFileNameFromPath(textFilePath);
-            foreach(TextListObject txtObj in textList)
+            foreach (TextListObject txtObj in textList)
             {
-                if(corpusName == txtObj.SentenceName)
+                if (corpusName == txtObj.SentenceName)
                 {
                     MessageBox.Show("이미 추가한 텍스트 파일입니다.");
                     return;
@@ -97,35 +102,32 @@ namespace CorpusTagging
             }
             textContent = textContent.Replace("\r", " ");
             textContent = textContent.Replace("\n", " "); // 개행문자는 제외함
-            string[] dotSplitText = textContent.Split('.'); // 컴마로 먼저 나눔
-            int indexNum = 0;
-            foreach(string splitText in dotSplitText)
+            string[] dotSplitText = textContent.Split(' '); // 컴마로 먼저 나눔
+            foreach (string text in dotSplitText)
             {
-                string[] blankSplit = splitText.Split(' '); // 띄어쓰기로 분리함
-                foreach (string text in blankSplit)
+                if (text != "" && text != " ")
                 {
-                    if (text != "" && text != " ")
-                    {
-                        // 값이 존재하는 경우에만 받아옴
-                        TextListObject textObj = new TextListObject(corpusName + "_" + indexNum, text);
-                        textObj.Text = text;
-                        textObj.PreviewMouseLeftButtonDown += textObjPreviewMouseLeftButtonDown;
-                        taggingJobWin.corpusListSt.Children.Add(textObj);
-                        textList.Add(textObj); // 리스트에도 저장함
-                    }
+                    // 값이 존재하는 경우에만 받아옴
+                    TextListObject textObj = new TextListObject(corpusName, text);
+                    textObj.Text = text;
+                    textObj.PreviewMouseLeftButtonDown += textObjPreviewMouseLeftButtonDown;
+                    taggingJobWin.corpusListSt.Children.Add(textObj);
+                    textList.Add(textObj); // 리스트에도 저장함
                 }
-                ComboBoxItem comboItem = new ComboBoxItem();
-                comboItem.Content = corpusName + "_" + indexNum;
-                corpusComboList.Add(comboItem);
-                corpusListCombo.SelectedItem = comboItem;
-                SaveToCsvFile();
             }
-            
+            ComboBoxItem comboItem = new ComboBoxItem();
+            comboItem.Content = corpusName;
+            corpusComboList.Add(comboItem);
+            corpusListCombo.SelectedItem = comboItem;
+            SaveToCsvFile();
+
         }
 
         private void textObjPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            MessageBox.Show("gg");
+            TextListObject txtObj = sender as TextListObject;
+            selectTextIndex = corpusListSt.Children.IndexOf(txtObj);
+            ChangeSelectTextObj(selectTextIndex);
         }
 
         private string FindFileNameFromPath(string filePath)
@@ -187,7 +189,15 @@ namespace CorpusTagging
                 
             }
             result = result.Remove(result.Length - 2); // 마지막 문장 없애기
-            System.IO.File.WriteAllText(saveFilePath, result, Encoding.GetEncoding("euc-kr"));
+            try
+            {
+                System.IO.File.WriteAllText(saveFilePath, result, Encoding.GetEncoding("euc-kr"));
+            }
+            catch (System.IO.IOException)
+            {
+                MessageBox.Show("csv파일이 열려 있습니다. 닫고 실행해주세요.");
+            }
+            
         }
 
         private void ReadCsvFile()
@@ -238,6 +248,7 @@ namespace CorpusTagging
                 {
                     tagText = csvText.Replace(StringResources.ExceptionArea, ",");
                     txtObj = new TextListObject(sentenceName, realText);
+                    txtObj.PreviewMouseLeftButtonDown += textObjPreviewMouseLeftButtonDown;
                     if (txtObj.TagText != "")
                     {
                         txtObj.TagText = tagText;
@@ -317,7 +328,8 @@ namespace CorpusTagging
                     corpusListSt.Children.Add(txtObj);
                 }
             }
-            ChangeSelectTextObj(0);
+            selectTextIndex = 0;
+            ChangeSelectTextObj(selectTextIndex);
         }
 
         private void ChangeSelectTextObj(int index)
@@ -393,7 +405,7 @@ namespace CorpusTagging
                 return;
             }
             TextListObject txtObj = (corpusListSt.Children[selectTextIndex] as TextListObject);
-            SubmitAct("0", txtObj);
+            SubmitAct("O", txtObj);
         }
 
         private void SubmitAct(string submitMode, TextListObject txtObj)
@@ -562,6 +574,37 @@ namespace CorpusTagging
         private void removeTextFileBtn_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void insertNewText_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void insertNewTextBtn_Click(object sender, RoutedEventArgs e)
+        {
+            //App.TextInsertWin = TextInsertWindow.GetTextInsertWin(corpusListSt.Children[selectTextIndex] as TextListObject);
+            //App.TextInsertWin.Show();
+        }
+
+        private void changeTextBtn_Click(object sender, RoutedEventArgs e)
+        {
+            App.TextChangeWin = TextChangeWindow.GetTextChangeWin(corpusListSt.Children[selectTextIndex] as TextListObject);
+            App.TextChangeWin.Show();
+        }
+        public void TextChangeEvent(TextListObject txtObj)
+        {
+            ShowingTextUpdate(txtObj);
+            SaveToCsvFile();
+        }
+
+        private void deleteTextBtn_Click(object sender, RoutedEventArgs e)
+        {
+            corpusListSt.Children.RemoveAt(selectTextIndex);
+            textList.RemoveAt(selectTextIndex);
+            SaveToCsvFile();
+            SelectTextIndexMinus();
+            SelectTextIndexPlus();
         }
     }
 }

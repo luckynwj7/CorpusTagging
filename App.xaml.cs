@@ -30,6 +30,18 @@ namespace CorpusTagging
             get { return inputTextWin; }
             set { inputTextWin = value; }
         }
+        private static TextChangeWindow textChangeWin;
+        public static TextChangeWindow TextChangeWin
+        {
+            get { return textChangeWin; }
+            set { textChangeWin = value; }
+        }
+        private static TextInsertWindow textInsertWin;
+        public static TextInsertWindow TextInsertWin
+        {
+            get { return textInsertWin; }
+            set { textInsertWin = value; }
+        }
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {

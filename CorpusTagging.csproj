@@ -63,6 +63,12 @@
     <Compile Include="TaggingJobWindow.xaml.cs">
       <DependentUpon>TaggingJobWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TextChangeWindow.xaml.cs">
+      <DependentUpon>TextChangeWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TextInsertWindow.xaml.cs">
+      <DependentUpon>TextInsertWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TextListObject.cs" />
     <Page Include="FileSelectWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -82,6 +88,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="TaggingJobWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TextChangeWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TextInsertWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

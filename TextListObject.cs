@@ -19,6 +19,7 @@ namespace CorpusTagging
         public string RealText
         {
             get { return realText; }
+            set { realText = value; }
         }
         private string tagText;
         public string TagText

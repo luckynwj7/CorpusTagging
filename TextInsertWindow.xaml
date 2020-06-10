@@ -1,0 +1,19 @@
+﻿<Window x:Class="CorpusTagging.TextInsertWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CorpusTagging"
+        mc:Ignorable="d"
+        Title="텍스트 삽입" Height="200" Width="450" Closing="Window_Closing">
+    <StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="20">
+            <TextBlock Text="삽입할 텍스트 입력" Padding="10"></TextBlock>
+            <TextBox Width="250" VerticalAlignment="Center" FontSize="20" x:Name="insertTextTxtBox"></TextBox>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Padding="10" Margin="10,0,0,0" Width="100" x:Name="prevInsertBtn" Click="prevInsertBtn_Click">이전 삽입</Button>
+            <Button Padding="10" Margin="10,0,0,0" Width="100" Name="nextInsertBtn" Click="nextInsertBtn_Click">다음 삽입</Button>
+        </StackPanel>
+    </StackPanel>
+</Window>

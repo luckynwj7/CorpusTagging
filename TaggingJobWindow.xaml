@@ -5,8 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CorpusTagging"
         mc:Ignorable="d"
-        Title="TaggingJobWindow" Height="1030" Width="900"
+        Top="10" Left="500"
+        Title="TaggingJobWindow" Height="1000" Width="900"
         Closing="Window_Closing">
+    <ScrollViewer>
     <StackPanel>
         <TextBlock TextAlignment="Center" FontSize="50" Margin="40">Corpus Tagging</TextBlock>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,40,0">
@@ -22,6 +24,11 @@
                 </StackPanel>
             </ScrollViewer>
         </Border>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,50,20">
+            <Button Padding="10" Width="150" Margin="10" x:Name="insertNewTextBtn" Click="insertNewTextBtn_Click">텍스트 새로 삽입</Button>
+            <Button Padding="10" Width="150" Margin="10" x:Name="changeTextBtn" Click="changeTextBtn_Click">현재 텍스트 변경</Button>
+            <Button Padding="10" Width="150" Margin="10" x:Name="deleteTextBtn" Click="deleteTextBtn_Click">현재 텍스트 삭제</Button>
+        </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Margin="10" Width="130" Height="40" x:Name="prevTextBtn" Click="prevTextBtn_Click">이전</Button>
             <Button  Margin="10" Width="130" Height="40" x:Name="nextTextBtn" Click="nextTextBtn_Click">다음</Button>
@@ -65,9 +72,10 @@
         </Border>
         
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,50,0">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,50,50">
             <Button Margin="10" Width="130" Height="40" x:Name="selectOtherFileBtn" Click="selectOtherFileBtn_Click">다른 파일 선택</Button>
             <Button Margin="10" Width="130" Height="40" x:Name="windowExitBtn" Click="windowExitBtn_Click">프로그램 종료</Button>
         </StackPanel>
     </StackPanel>
+    </ScrollViewer>
 </Window>
