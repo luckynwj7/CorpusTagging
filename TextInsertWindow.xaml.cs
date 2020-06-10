@@ -42,19 +42,21 @@ namespace CorpusTagging
 
         private void prevInsertBtn_Click(object sender, RoutedEventArgs e)
         {
-            TextListObject inputTxtObj = new TextListObject(txtObj.SentenceName, insertTextTxtBox.Text);
-            App.TaggingJobWin.corpusListSt.Children.Insert(insertPosition, inputTxtObj);
-            App.TaggingJobWin.TextList.Insert(insertPosition, inputTxtObj);
-            App.TaggingJobWin.TextChangeEvent(inputTxtObj);
-            this.Hide();
+            TextInputProcess(0);
         }
 
         private void nextInsertBtn_Click(object sender, RoutedEventArgs e)
         {
+            TextInputProcess(1);
+        }
+
+        private void TextInputProcess(int flagPrevNext)
+        {
             TextListObject inputTxtObj = new TextListObject(txtObj.SentenceName, insertTextTxtBox.Text);
-            App.TaggingJobWin.corpusListSt.Children.Insert(insertPosition+1, inputTxtObj);
-            App.TaggingJobWin.TextList.Insert(insertPosition+1, inputTxtObj);
-            App.TaggingJobWin.TextChangeEvent(inputTxtObj);
+            inputTxtObj.TagText = "O";
+            App.TaggingJobWin.corpusListSt.Children.Insert(insertPosition + flagPrevNext, inputTxtObj);
+            App.TaggingJobWin.TextList.Insert(insertPosition + flagPrevNext, inputTxtObj);
+            App.TaggingJobWin.InputTextEvent(inputTxtObj);
             this.Hide();
         }
 
@@ -66,6 +68,14 @@ namespace CorpusTagging
         private bool ConditionCheck()
         {
             return true;
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Enter)
+            {
+                TextInputProcess(0);
+            }
         }
     }
 }

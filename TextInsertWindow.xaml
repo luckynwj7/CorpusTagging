@@ -5,15 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CorpusTagging"
         mc:Ignorable="d"
-        Title="텍스트 삽입" Height="200" Width="450" Closing="Window_Closing">
+        Title="텍스트 삽입" Height="200" Width="450" Closing="Window_Closing" KeyDown="Window_KeyDown">
     <StackPanel>
         <StackPanel Orientation="Horizontal" Margin="20">
             <TextBlock Text="삽입할 텍스트 입력" Padding="10"></TextBlock>
             <TextBox Width="250" VerticalAlignment="Center" FontSize="20" x:Name="insertTextTxtBox"></TextBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Padding="10" Margin="10,0,0,0" Width="100" x:Name="prevInsertBtn" Click="prevInsertBtn_Click">이전 삽입</Button>
-            <Button Padding="10" Margin="10,0,0,0" Width="100" Name="nextInsertBtn" Click="nextInsertBtn_Click">다음 삽입</Button>
+            <Button Padding="10" Margin="10,0,0,0" Width="120" x:Name="prevInsertBtn" Click="prevInsertBtn_Click">이전 삽입(엔터키)</Button>
+            <Button Padding="10" Margin="10,0,0,0" Width="120" Name="nextInsertBtn" Click="nextInsertBtn_Click">다음 삽입</Button>
         </StackPanel>
     </StackPanel>
 </Window>

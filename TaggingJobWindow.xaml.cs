@@ -47,6 +47,8 @@ namespace CorpusTagging
                 btn.Background = Brushes.Yellow;
                 btn.IsChecked = false;
             }
+            startSentenceBtn.Background = Brushes.Yellow;
+            startSentenceBtn.IsChecked = false;
         }
         public static TaggingJobWindow GetTaggingJobWin(string saveFilePath)
         {
@@ -109,7 +111,7 @@ namespace CorpusTagging
                 {
                     // 값이 존재하는 경우에만 받아옴
                     TextListObject textObj = new TextListObject(corpusName, text);
-                    textObj.Text = text;
+                    textObj.Text = text + " (O)";
                     textObj.PreviewMouseLeftButtonDown += textObjPreviewMouseLeftButtonDown;
                     taggingJobWin.corpusListSt.Children.Add(textObj);
                     textList.Add(textObj); // 리스트에도 저장함
@@ -180,15 +182,15 @@ namespace CorpusTagging
                     {
                         tagText = "\"" + tagText + "\"";
                     }
-                    result += tagText + ",\n";
+                    result += tagText + "\n";
                 }
                 else
                 {
-                    result += ",\n";
+                    result += "O\n";
                 }
                 
             }
-            result = result.Remove(result.Length - 2); // 마지막 문장 없애기
+            result = result.Remove(result.Length - 1); // 마지막 문장 없애기
             try
             {
                 System.IO.File.WriteAllText(saveFilePath, result, Encoding.GetEncoding("euc-kr"));
@@ -211,7 +213,11 @@ namespace CorpusTagging
             string csvContent = saveFileText.Substring(startCount, saveFileText.Length-startCount);
 
             csvContent = csvContent.Replace("\r", "");
-            csvContent = csvContent.Replace("\n", "");
+            csvContent = csvContent.Replace("\n", ",");
+            if(csvContent[0] == ',')
+            {
+                csvContent = csvContent.Remove(0, 1); // 첫 컴마는 없애기
+            }
             csvContent = ChangeExceptionComma(csvContent);
             string[] csvSplitText = csvContent.Split(',');
             int indexNum = 0;
@@ -339,12 +345,40 @@ namespace CorpusTagging
                 // 오류 방지
                 return;
             }
-            foreach(TextListObject txtObj in corpusListSt.Children)
+            selectTextIndex = index;
+            foreach (TextListObject txtObj in corpusListSt.Children)
             {
                 txtObj.Foreground = Brushes.Black;
             }
             (corpusListSt.Children[index] as TextListObject).Foreground = Brushes.Red;
+
+        }
+        private int ModulateBringIntoView(int index, int flagPlusMinus)
+        {
+            int maxStChild = corpusListSt.Children.Count-1;
+            if (flagPlusMinus < 0)
+            {
+                index -= 4;
+            }
+            else if(flagPlusMinus > 0)
+            {
+                index += 4;
+            }
+            else
+            {
+                return 0;
+            }
             
+            if (index < 0)
+            {
+                index = 0;
+            }
+            else if (index > maxStChild)
+            {
+                index = maxStChild;
+            }
+
+            return index;
         }
 
         private void prevTextBtn_Click(object sender, RoutedEventArgs e)
@@ -365,6 +399,7 @@ namespace CorpusTagging
                 selectTextIndex = corpusListSt.Children.Count - 1;
             }
             ChangeSelectTextObj(selectTextIndex);
+            (corpusListSt.Children[ModulateBringIntoView(selectTextIndex, -1)] as TextListObject).BringIntoView(); // 해당 위치로 포커스가 가도록 함
         }
         private void SelectTextIndexPlus()
         {
@@ -374,6 +409,7 @@ namespace CorpusTagging
                 selectTextIndex = 0;
             }
             ChangeSelectTextObj(selectTextIndex);
+            (corpusListSt.Children[ModulateBringIntoView(selectTextIndex, 1)] as TextListObject).BringIntoView(); // 해당 위치로 포커스가 가도록 함
         }
         private void beginSubmitBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -399,22 +435,25 @@ namespace CorpusTagging
 
         private void outsideSubmitBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (ToggleCountStatus() > 0)
-            {
-                MessageBox.Show("태그 상태가 입력되어 있는 상태로는 \"해당없음\" 옵션을 실행할 수 없습니다.");
-                return;
-            }
             TextListObject txtObj = (corpusListSt.Children[selectTextIndex] as TextListObject);
             SubmitAct("O", txtObj);
         }
 
         private void SubmitAct(string submitMode, TextListObject txtObj)
         {
+            if (startSentenceBtn.IsChecked == true)
+            {
+                //txtObj.SentenceName = txtObj.RealText;
+            }
             InitializeToggleButton();
             txtObj.TagText = submitMode;
             SaveToCsvFile();
             ShowingTextUpdate(txtObj);
             SelectTextIndexPlus();
+
+            // 문장시작 초기화
+            startSentenceBtn.Background = Brushes.Yellow;
+            startSentenceBtn.IsChecked = false;
         }
         
         private void ShowingTextUpdate(TextListObject txtObj)
@@ -571,6 +610,13 @@ namespace CorpusTagging
             }
         }
 
+
+        private void jobSaveBtn_Click(object sender, RoutedEventArgs e)
+        {
+            TextListObject txtObj = (corpusListSt.Children[selectTextIndex] as TextListObject);
+            SubmitAct("SAVE" + ToggleStrStatus(), txtObj);
+        }
+
         private void removeTextFileBtn_Click(object sender, RoutedEventArgs e)
         {
 
@@ -583,8 +629,8 @@ namespace CorpusTagging
 
         private void insertNewTextBtn_Click(object sender, RoutedEventArgs e)
         {
-            //App.TextInsertWin = TextInsertWindow.GetTextInsertWin(corpusListSt.Children[selectTextIndex] as TextListObject);
-            //App.TextInsertWin.Show();
+            App.TextInsertWin = TextInsertWindow.GetTextInsertWin(corpusListSt.Children[selectTextIndex] as TextListObject);
+            App.TextInsertWin.Show();
         }
 
         private void changeTextBtn_Click(object sender, RoutedEventArgs e)
@@ -597,6 +643,12 @@ namespace CorpusTagging
             ShowingTextUpdate(txtObj);
             SaveToCsvFile();
         }
+        public void InputTextEvent(TextListObject txtObj)
+        {
+            txtObj.PreviewMouseLeftButtonDown += textObjPreviewMouseLeftButtonDown;
+            TextChangeEvent(txtObj);
+            ChangeSelectTextObj(corpusListSt.Children.IndexOf(txtObj));
+        }
 
         private void deleteTextBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -605,6 +657,29 @@ namespace CorpusTagging
             SaveToCsvFile();
             SelectTextIndexMinus();
             SelectTextIndexPlus();
+        }
+
+        private void moveSavePositionBtn_Click(object sender, RoutedEventArgs e)
+        {
+            int maxCount = corpusListSt.Children.Count;
+            for (int txtObjIndex = selectTextIndex+1; txtObjIndex < maxCount; txtObjIndex++)
+            {
+                if((corpusListSt.Children[txtObjIndex] as TextListObject).TagText == "SAVE")
+                {
+                    ChangeSelectTextObj(txtObjIndex);
+                    (corpusListSt.Children[txtObjIndex] as TextListObject).BringIntoView();
+                    break;
+                }
+                else if (txtObjIndex >= maxCount-1)
+                {
+                    txtObjIndex = -1;
+                }
+                else if (txtObjIndex == selectTextIndex)
+                {
+                    MessageBox.Show("저장해 둔 책갈피가 없습니다.");
+                    break;
+                }
+            }
         }
     }
 }

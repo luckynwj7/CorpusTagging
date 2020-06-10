@@ -14,6 +14,7 @@ namespace CorpusTagging
         public string SentenceName
         {
             get { return sentenceName; }
+            set { sentenceName = value; }
         }
         private string realText;
         public string RealText
@@ -34,8 +35,8 @@ namespace CorpusTagging
         {
             this.sentenceName = sentenceName;
             this.realText = realText;
-            this.FontSize = 20;
-            this.Margin = new Thickness(10);
+            this.FontSize = 15;
+            this.Margin = new Thickness(5);
         }
 
 
