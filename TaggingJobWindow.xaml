@@ -7,7 +7,8 @@
         mc:Ignorable="d"
         Top="10" Left="500"
         Title="TaggingJobWindow" Height="1000" Width="900"
-        Closing="Window_Closing">
+        Closing="Window_Closing"
+        KeyDown="Window_KeyDown">
     <ScrollViewer>
         <StackPanel>
             <TextBlock TextAlignment="Center" FontSize="50" Margin="40">Corpus Tagging</TextBlock>
@@ -51,16 +52,16 @@
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <ToggleButton Grid.Row="0" Grid.Column="0" Margin="10" Width="130" Height="40" x:Name="perTogBtn" Click="perTogBtn_Click">인물(PER)</ToggleButton>
-                        <ToggleButton Grid.Row="0" Grid.Column="1" Margin="10" Width="130" Height="40" x:Name="locTogBtn" Click="locTogBtn_Click">지역(LOC)</ToggleButton>
-                        <ToggleButton Grid.Row="0" Grid.Column="2" Margin="10" Width="130" Height="40" x:Name="orgTogBtn" Click="orgTogBtn_Click">기관(ORG)</ToggleButton>
-                        <ToggleButton Grid.Row="0" Grid.Column="3" Margin="10" Width="130" Height="40" x:Name="dtTogBtn" Click="dtTogBtn_Click">날짜(DT)</ToggleButton>
-                        <ToggleButton Grid.Row="0" Grid.Column="4" Margin="10" Width="130" Height="40" x:Name="timTogBtn" Click="timTogBtn_Click">시간(TIM)</ToggleButton>
-                        <ToggleButton Grid.Row="1" Grid.Column="0" Margin="10" Width="130" Height="40" x:Name="qtTogBtn" Click="qtTogBtn_Click">수량(QT)</ToggleButton>
-                        <ToggleButton Grid.Row="1" Grid.Column="1" Margin="10" Width="130" Height="40" x:Name="fdTogBtn" Click="fdTogBtn_Click">음식(FD)</ToggleButton>
-                        <ToggleButton Grid.Row="1" Grid.Column="2" Margin="10" Width="130" Height="40" x:Name="sprtTogBtn" Click="sprtTogBtn_Click">스포츠(SPRT)</ToggleButton>
-                        <ToggleButton Grid.Row="1" Grid.Column="3" Margin="10" Width="130" Height="40" x:Name="clthTogBtn" Click="clthTogBtn_Click">의류(CLTH)</ToggleButton>
-                        <ToggleButton Grid.Row="1" Grid.Column="4" Margin="10" Width="130" Height="40" x:Name="startSentenceBtn">문장 시작하기</ToggleButton>
+                        <ToggleButton Grid.Row="0" Grid.Column="0" Margin="10" Width="130" Height="40" x:Name="perTogBtn" Click="perTogBtn_Click">인물(PER) - Q</ToggleButton>
+                        <ToggleButton Grid.Row="0" Grid.Column="1" Margin="10" Width="130" Height="40" x:Name="locTogBtn" Click="locTogBtn_Click">지역(LOC) - W</ToggleButton>
+                        <ToggleButton Grid.Row="0" Grid.Column="2" Margin="10" Width="130" Height="40" x:Name="orgTogBtn" Click="orgTogBtn_Click">기관(ORG) - E</ToggleButton>
+                        <ToggleButton Grid.Row="0" Grid.Column="3" Margin="10" Width="130" Height="40" x:Name="dtTogBtn" Click="dtTogBtn_Click">날짜(DT) - R</ToggleButton>
+                        <ToggleButton Grid.Row="0" Grid.Column="4" Margin="10" Width="130" Height="40" x:Name="timTogBtn" Click="timTogBtn_Click">시간(TIM) - T</ToggleButton>
+                        <ToggleButton Grid.Row="1" Grid.Column="0" Margin="10" Width="130" Height="40" x:Name="qtTogBtn" Click="qtTogBtn_Click">수량(QT) - A</ToggleButton>
+                        <ToggleButton Grid.Row="1" Grid.Column="1" Margin="10" Width="130" Height="40" x:Name="fdTogBtn" Click="fdTogBtn_Click">음식(FD) - S</ToggleButton>
+                        <ToggleButton Grid.Row="1" Grid.Column="2" Margin="10" Width="130" Height="40" x:Name="sprtTogBtn" Click="sprtTogBtn_Click">스포츠(SPRT) - D</ToggleButton>
+                        <ToggleButton Grid.Row="1" Grid.Column="3" Margin="10" Width="130" Height="40" x:Name="clthTogBtn" Click="clthTogBtn_Click">의류(CLTH)- F</ToggleButton>
+                        <ToggleButton Grid.Row="1" Grid.Column="4" Margin="10" Width="130" Height="40" x:Name="startSentenceBtn">문장 시작하기 - G</ToggleButton>
                     </Grid>
                 </StackPanel>
             </Border>
@@ -68,9 +69,9 @@
             <TextBlock Text="태깅 선택" HorizontalAlignment="Center" Margin="10,20,10,10"></TextBlock>
             <Border BorderThickness="1" BorderBrush="Black" Width="500">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Margin="10" Width="130" Height="40" x:Name="beginSubmitBtn" Click="beginSubmitBtn_Click">시작(B)</Button>
-                    <Button Margin="10" Width="130" Height="40" x:Name="insdeSubmitBtn" Click="insdeSubmitBtn_Click">안쪽(I)</Button>
-                    <Button Margin="10" Width="130" Height="40" x:Name="outsideSubmitBtn" Click="outsideSubmitBtn_Click">해당없음(O)</Button>
+                    <Button Margin="10" Width="130" Height="40" x:Name="beginSubmitBtn" Click="beginSubmitBtn_Click">시작(B) - Num1</Button>
+                    <Button Margin="10" Width="130" Height="40" x:Name="insdeSubmitBtn" Click="insdeSubmitBtn_Click">안쪽(I) - Num2</Button>
+                    <Button Margin="10" Width="130" Height="40" x:Name="outsideSubmitBtn" Click="outsideSubmitBtn_Click">해당없음(O) - Num3</Button>
                 </StackPanel>
             </Border>
 

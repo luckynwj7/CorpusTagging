@@ -417,6 +417,10 @@ namespace CorpusTagging
         }
         private void beginSubmitBtn_Click(object sender, RoutedEventArgs e)
         {
+            BeginSubmitAct();
+        }
+        private void BeginSubmitAct()
+        {
             if (ToggleCountStatus() != 1)
             {
                 MessageBox.Show("태그 상태가 하나가 아니라면 이 옵션을 실행할 수 없습니다.");
@@ -428,6 +432,11 @@ namespace CorpusTagging
 
         private void insdeSubmitBtn_Click(object sender, RoutedEventArgs e)
         {
+            InsideSubmitAct();
+        }
+
+        private void InsideSubmitAct()
+        {
             if (ToggleCountStatus() != 1)
             {
                 MessageBox.Show("태그 상태가 하나가 아니라면 이 옵션을 실행할 수 없습니다.");
@@ -438,6 +447,11 @@ namespace CorpusTagging
         }
 
         private void outsideSubmitBtn_Click(object sender, RoutedEventArgs e)
+        {
+            OutsideSubmitAct();
+        }
+        
+        private void OutsideSubmitAct()
         {
             TextListObject txtObj = (corpusListSt.Children[selectTextIndex] as TextListObject);
             SubmitAct("O", txtObj);
@@ -695,6 +709,179 @@ namespace CorpusTagging
                     break;
                 }
             }
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.NumPad1)
+            {
+                BeginSubmitAct();
+            }
+            else if (e.Key == Key.NumPad2)
+            {
+                InsideSubmitAct();
+            }
+            else if(e.Key == Key.NumPad3)
+            {
+                OutsideSubmitAct();
+            }
+            else if (e.Key == Key.F11)
+            {
+                SelectTextIndexMinus();
+            }
+            else if (e.Key == Key.F12)
+            {
+                SelectTextIndexPlus();
+            }
+            else if(e.Key == Key.Q)
+            {
+                if (perTogBtn.IsChecked == false)
+                {
+                    perTogBtn.IsChecked = true;
+                }
+                else
+                {
+                    perTogBtn.IsChecked = false;
+                }
+                
+                if (ToggleCountStatus() > 1)
+                {
+                    InitializeToggleButton("perTogBtn");
+                }
+            }
+            else if (e.Key == Key.W)
+            {
+                if (locTogBtn.IsChecked == false)
+                {
+                    locTogBtn.IsChecked = true;
+                }
+                else
+                {
+                    locTogBtn.IsChecked = false;
+                }
+                if (ToggleCountStatus() > 1)
+                {
+                    InitializeToggleButton("locTogBtn");
+                }
+            }
+            else if (e.Key == Key.E)
+            {
+                if (orgTogBtn.IsChecked == false)
+                {
+                    orgTogBtn.IsChecked = true;
+                }
+                else
+                {
+                    orgTogBtn.IsChecked = false;
+                }
+                if (ToggleCountStatus() > 1)
+                {
+                    InitializeToggleButton("orgTogBtn");
+                }
+            }
+            else if (e.Key == Key.R)
+            {
+                if (dtTogBtn.IsChecked == false)
+                {
+                    dtTogBtn.IsChecked = true;
+                }
+                else
+                {
+                    dtTogBtn.IsChecked = false;
+                }
+                if (ToggleCountStatus() > 1)
+                {
+                    InitializeToggleButton("dtTogBtn");
+                }
+            }
+            else if (e.Key == Key.T)
+            {
+                if (timTogBtn.IsChecked == false)
+                {
+                    timTogBtn.IsChecked = true;
+                }
+                else
+                {
+                    timTogBtn.IsChecked = false;
+                }
+                if (ToggleCountStatus() > 1)
+                {
+                    InitializeToggleButton("timTogBtn");
+                }
+            }
+            else if (e.Key == Key.A)
+            {
+                if (qtTogBtn.IsChecked == false)
+                {
+                    qtTogBtn.IsChecked = true;
+                }
+                else
+                {
+                    qtTogBtn.IsChecked = false;
+                }
+                if (ToggleCountStatus() > 1)
+                {
+                    InitializeToggleButton("qtTogBtn");
+                }
+            }
+            else if (e.Key == Key.S)
+            {
+                if (fdTogBtn.IsChecked == false)
+                {
+                    fdTogBtn.IsChecked = true;
+                }
+                else
+                {
+                    fdTogBtn.IsChecked = false;
+                }
+                if (ToggleCountStatus() > 1)
+                {
+                    InitializeToggleButton("fdTogBtn");
+                }
+            }
+            else if (e.Key == Key.D)
+            {
+                if (sprtTogBtn.IsChecked == false)
+                {
+                    sprtTogBtn.IsChecked = true;
+                }
+                else
+                {
+                    sprtTogBtn.IsChecked = false;
+                }
+                if (ToggleCountStatus() > 1)
+                {
+                    InitializeToggleButton("sprtTogBtn");
+                }
+            }
+            else if (e.Key == Key.F)
+            {
+                if (clthTogBtn.IsChecked == false)
+                {
+                    clthTogBtn.IsChecked = true;
+                }
+                else
+                {
+                    clthTogBtn.IsChecked = false;
+                }
+                if (ToggleCountStatus() > 1)
+                {
+                    InitializeToggleButton("clthTogBtn");
+                }
+            }
+            else if (e.Key == Key.G)
+            {
+                if (startSentenceBtn.IsChecked == false)
+                {
+                    startSentenceBtn.IsChecked = true;
+                }
+                else
+                {
+                    startSentenceBtn.IsChecked = false;
+                }
+                
+            }
+
         }
     }
 }
