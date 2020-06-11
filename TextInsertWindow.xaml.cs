@@ -33,6 +33,7 @@ namespace CorpusTagging
             {
                 textInsertWin = new TextInsertWindow();
             }
+            textInsertWin.insertTextTxtBox.Focus();
             textInsertWin.txtObj = txtObj;
             textInsertWin.insertPosition = App.TaggingJobWin.corpusListSt.Children.IndexOf(txtObj);
             textInsertWin.dataPosition = App.TaggingJobWin.TextList.IndexOf(txtObj);
@@ -63,6 +64,7 @@ namespace CorpusTagging
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            insertTextTxtBox.Text = "";
             e.Cancel = true;
             this.Hide();
         }
@@ -76,6 +78,11 @@ namespace CorpusTagging
             if(e.Key == Key.Enter)
             {
                 TextInputProcess(0);
+            }
+            else if(e.Key == Key.Escape)
+            {
+                insertTextTxtBox.Text = "";
+                this.Hide();
             }
         }
     }

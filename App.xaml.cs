@@ -42,6 +42,12 @@ namespace CorpusTagging
             get { return textInsertWin; }
             set { textInsertWin = value; }
         }
+        private static TextSplitWindow textSplitWin;
+        public static TextSplitWindow TextSplitWin
+        {
+            get { return textSplitWin; }
+            set { textSplitWin = value; }
+        }
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {

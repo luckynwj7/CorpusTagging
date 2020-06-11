@@ -126,7 +126,7 @@ namespace CorpusTagging
             corpusComboList.Add(comboItem);
             corpusListCombo.SelectedItem = comboItem;
             SaveToCsvFile();
-
+            sentenceCount++;
         }
 
         private void textObjPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -242,6 +242,7 @@ namespace CorpusTagging
                         comboBoxItem.Content = sentenceName;
                         comboBoxItemName = sentenceName;
                         corpusComboList.Add(comboBoxItem);
+                        sentenceCount = corpusComboList.Count;
                         corpusListCombo.SelectedItem = comboBoxItem;
                         selectedFileIndex = sentenceName;
                     }
@@ -476,6 +477,7 @@ namespace CorpusTagging
 
         private void SentenceAdd(TextListObject txtObj)
         {
+            txtObj.Text = StringResources.SentenceStartFlag + txtObj.Text;
             int txtObjIndex = corpusListSt.Children.IndexOf(txtObj);
             for(int indexNum = txtObjIndex; indexNum < corpusListSt.Children.Count; indexNum++)
             {
@@ -487,6 +489,12 @@ namespace CorpusTagging
         
         private void ShowingTextUpdate(TextListObject txtObj)
         {
+            bool sentenceStartFlag = false;
+            int flagLength = StringResources.SentenceStartFlag.Length;
+            if (txtObj.Text.Length >= flagLength && txtObj.Text.Substring(0,flagLength) == StringResources.SentenceStartFlag) // 시작 문장임을 알려줌
+            {
+                sentenceStartFlag = true;
+            }
             if (txtObj.TagText != "")
             {
                 txtObj.Text = txtObj.RealText + " (" + txtObj.TagText + ")";
@@ -494,6 +502,10 @@ namespace CorpusTagging
             else
             {
                 txtObj.Text = txtObj.RealText;
+            }
+            if (sentenceStartFlag)
+            {
+                txtObj.Text = StringResources.SentenceStartFlag + txtObj.Text;
             }
         }
 
@@ -646,17 +658,11 @@ namespace CorpusTagging
             SubmitAct("SAVE" + ToggleStrStatus(), txtObj);
         }
 
-        private void removeTextFileBtn_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void insertNewText_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void insertNewTextBtn_Click(object sender, RoutedEventArgs e)
+        {
+            InsertNewTextBtnClick();
+        }
+        private void InsertNewTextBtnClick()
         {
             App.TextInsertWin = TextInsertWindow.GetTextInsertWin(corpusListSt.Children[selectTextIndex] as TextListObject);
             App.TextInsertWin.Show();
@@ -664,9 +670,14 @@ namespace CorpusTagging
 
         private void changeTextBtn_Click(object sender, RoutedEventArgs e)
         {
+            ChangeTextBtnClick();
+        }
+        private void ChangeTextBtnClick()
+        {
             App.TextChangeWin = TextChangeWindow.GetTextChangeWin(corpusListSt.Children[selectTextIndex] as TextListObject);
             App.TextChangeWin.Show();
         }
+
         public void TextChangeEvent(TextListObject txtObj)
         {
             ShowingTextUpdate(txtObj);
@@ -681,6 +692,11 @@ namespace CorpusTagging
 
         private void deleteTextBtn_Click(object sender, RoutedEventArgs e)
         {
+            DeleteTextBtnClick();
+        }
+        private void DeleteTextBtnClick()
+        {
+
             corpusListSt.Children.RemoveAt(selectTextIndex);
             textList.RemoveAt(selectTextIndex);
             SaveToCsvFile();
@@ -725,11 +741,11 @@ namespace CorpusTagging
             {
                 OutsideSubmitAct();
             }
-            else if (e.Key == Key.F11)
+            else if (e.Key == Key.Up)
             {
                 SelectTextIndexMinus();
             }
-            else if (e.Key == Key.F12)
+            else if (e.Key == Key.Down)
             {
                 SelectTextIndexPlus();
             }
@@ -881,7 +897,38 @@ namespace CorpusTagging
                 }
                 
             }
+            else if(e.Key == Key.F1)
+            {
+                InsertNewTextBtnClick();
+            }
+            else if (e.Key == Key.F2)
+            {
+                ChangeTextBtnClick();
+            }
+            else if (e.Key == Key.F3)
+            {
+                SplitTextBtnClick();
+            }
+            else if (e.Key == Key.F4)
+            {
+                DeleteTextBtnClick();
+            }
 
+        }
+
+        private void removeTextFileBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void splitTextBtn_Click(object sender, RoutedEventArgs e)
+        {
+            SplitTextBtnClick();
+        }
+        private void SplitTextBtnClick()
+        {
+            App.TextSplitWin = TextSplitWindow.GetTextSplitWin(corpusListSt.Children[selectTextIndex] as TextListObject);
+            App.TextSplitWin.Show();
         }
     }
 }

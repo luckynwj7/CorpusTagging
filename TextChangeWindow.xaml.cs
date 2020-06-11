@@ -53,11 +53,14 @@ namespace CorpusTagging
             {
                 ChangeFinishAct();
             }
+            else if(e.Key == Key.Escape)
+            {
+                this.Hide();
+            }
         }
 
         private void ChangeFinishAct()
         {
-
             txtObj.RealText = changeTextTxtBox.Text;
             this.Hide();
             App.TaggingJobWin.TextChangeEvent(txtObj);

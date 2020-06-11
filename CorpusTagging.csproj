@@ -70,6 +70,9 @@
       <DependentUpon>TextInsertWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="TextListObject.cs" />
+    <Compile Include="TextSplitWindow.xaml.cs">
+      <DependentUpon>TextSplitWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="FileSelectWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -96,6 +99,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="TextInsertWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TextSplitWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
