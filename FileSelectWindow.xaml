@@ -5,10 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CorpusTagging"
         mc:Ignorable="d"
-        Title="Corpus Tagging" Height="400" Width="520"
+        Title="Corpus Tagging" Height="670" Width="520"
         Closing="Window_Closing">
     <StackPanel Margin="20,25,20,20">
+        
         <TextBlock Text="Corpus Tagging" FontSize="50" Margin="30,20,30,30" TextAlignment="Center"></TextBlock>
+        <Image Source="mainTagImage.png"  Width="200" Height="200" HorizontalAlignment="Center" Margin="0,0,0,20"/>
         <StackPanel Orientation="Horizontal" Margin="10">
             <TextBlock Text="저장 파일 선택   " Width="160" TextAlignment="Right"></TextBlock>
             <Border BorderThickness="1" BorderBrush="Black">
@@ -23,7 +25,7 @@
             <Button Padding="10" Margin="10" Width="150" x:Name="currentFileCheckBtn" Click="currentFileCheckBtn_Click">작업 시작</Button>
         </StackPanel>
         <StackPanel HorizontalAlignment="Right" Margin="0,30,0,0">
-            <TextBlock>문의 : 멀티플랫폼 오피스팀 노원종</TextBlock>
+            <TextBlock>제작 : 멀티플랫폼 오피스팀 노원종 연구원</TextBlock>
         </StackPanel>
     </StackPanel>
 </Window>
