@@ -11,5 +11,7 @@ namespace CorpusTagging
         public static readonly string CsvHeader = "SENT#,TEXT,TAG\n";
         public static readonly string ExceptionArea = "||ExceptionArea||";
         public static readonly string SentenceStartFlag = "*문장시작* ";
+        public static readonly string SentSpliter = "||SentSplitArea||";
+        public static readonly string TempSentSpliter = "||TempSentSplitArea||";
     }
 }

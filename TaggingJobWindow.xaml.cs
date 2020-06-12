@@ -97,36 +97,41 @@ namespace CorpusTagging
             }
             //string textContent = File.ReadAllText(textFilePath, Encoding.GetEncoding("euc-kr"));
             string textContent = File.ReadAllText(textFilePath);
-            string corpusName = FindFileNameFromPath(textFilePath);
-            foreach (TextListObject txtObj in textList)
-            {
-                if (corpusName == txtObj.SentenceName)
-                {
-                    MessageBox.Show("이미 추가한 텍스트 파일입니다.");
-                    return;
-                }
-            }
+            textContent = textContent.Replace(".", StringResources.TempSentSpliter); // 점을 임시 문자열로 바꿈
+            textContent = textContent.Replace(StringResources.SentSpliter,"."); // 문장 분리 문자열을 점으로 바꿈
+
             textContent = textContent.Replace("\r", " ");
             textContent = textContent.Replace("\n", " "); // 개행문자는 제외함
-            string[] dotSplitText = textContent.Split(' '); // 컴마로 먼저 나눔
-            foreach (string text in dotSplitText)
+            string[] sentSplitText = textContent.Split('.'); // 문자열 나눔
+            foreach(string splitSent in sentSplitText)
             {
-                if (text != "" && text != " ")
+                if(splitSent == "")
                 {
-                    // 값이 존재하는 경우에만 받아옴
-                    TextListObject textObj = new TextListObject(corpusName, text);
-                    textObj.Text = text + " (O)";
-                    textObj.PreviewMouseLeftButtonDown += textObjPreviewMouseLeftButtonDown;
-                    taggingJobWin.corpusListSt.Children.Add(textObj);
-                    textList.Add(textObj); // 리스트에도 저장함
+                    // 아무 내용이 없으면 건너뜀
+                    continue;
                 }
+                string resultSent = splitSent.Replace(StringResources.TempSentSpliter, ".");
+                string[] dotSplitText = resultSent.Split(' ');
+                string corpusName = "sent_" + sentenceCount.ToString();
+                foreach (string text in dotSplitText)
+                {
+                    if (text != "" && text != " ")
+                    {
+                        // 값이 존재하는 경우에만 받아옴
+                        TextListObject textObj = new TextListObject(corpusName, text);
+                        textObj.Text = text + " (O)";
+                        textObj.PreviewMouseLeftButtonDown += textObjPreviewMouseLeftButtonDown;
+                        taggingJobWin.corpusListSt.Children.Add(textObj);
+                        textList.Add(textObj); // 리스트에도 저장함
+                    }
+                }
+                ComboBoxItem comboItem = new ComboBoxItem();
+                comboItem.Content = corpusName;
+                corpusComboList.Add(comboItem);
+                corpusListCombo.SelectedItem = comboItem;
+                SaveToCsvFile();
+                sentenceCount++;
             }
-            ComboBoxItem comboItem = new ComboBoxItem();
-            comboItem.Content = corpusName;
-            corpusComboList.Add(comboItem);
-            corpusListCombo.SelectedItem = comboItem;
-            SaveToCsvFile();
-            sentenceCount++;
         }
 
         private void textObjPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -388,14 +393,40 @@ namespace CorpusTagging
 
         private void prevTextBtn_Click(object sender, RoutedEventArgs e)
         {
-            SelectTextIndexMinus();
+            MovePrevTextFile();
+        }
+        private void MovePrevTextFile()
+        {
+            int selectIndex = corpusListCombo.SelectedIndex - 1;
+            if (selectIndex < 0)
+            {
+                selectIndex = corpusComboList.Count - 1;
+            }
+            ComboSelectChange(selectIndex);
         }
 
 
         private void nextTextBtn_Click(object sender, RoutedEventArgs e)
         {
-            SelectTextIndexPlus();
+            MoveNextTextFile();
         }
+        private void MoveNextTextFile()
+        {
+            int selectIndex = corpusListCombo.SelectedIndex + 1;
+            if (selectIndex >= corpusComboList.Count)
+            {
+                selectIndex = 0;
+            }
+            ComboSelectChange(selectIndex);
+        }
+
+        private void ComboSelectChange(int selectIndex)
+        {
+            selectedFileIndex = corpusComboList[selectIndex].Content.ToString();
+            corpusListCombo.SelectedIndex = selectIndex;
+            SelectTextFile();
+        }
+
         private void SelectTextIndexMinus()
         {
             selectTextIndex--;
@@ -706,20 +737,38 @@ namespace CorpusTagging
 
         private void moveSavePositionBtn_Click(object sender, RoutedEventArgs e)
         {
-            int maxCount = corpusListSt.Children.Count;
-            for (int txtObjIndex = selectTextIndex+1; txtObjIndex < maxCount; txtObjIndex++)
+            int maxCount = textList.Count;
+            TextListObject currentTxtObj = corpusListSt.Children[selectTextIndex] as TextListObject;
+            for (int txtObjIndex = textList.IndexOf(currentTxtObj) + 1; txtObjIndex != textList.IndexOf(currentTxtObj); txtObjIndex++)
             {
-                if((corpusListSt.Children[txtObjIndex] as TextListObject).TagText == "SAVE")
+                Console.WriteLine(txtObjIndex);
+                if(textList[txtObjIndex].TagText == "SAVE")
                 {
-                    ChangeSelectTextObj(txtObjIndex);
-                    (corpusListSt.Children[txtObjIndex] as TextListObject).BringIntoView();
+
+                    int innerMaxCount = corpusComboList.Count;
+                    for(int comboIndex = corpusListCombo.SelectedIndex; comboIndex != corpusListCombo.SelectedIndex-1;comboIndex++)
+                    {
+                        if (corpusComboList[comboIndex].Content.ToString() == textList[txtObjIndex].SentenceName)
+                        {
+                            int resultIndex = comboIndex;
+                            ComboSelectChange(resultIndex);
+                            resultIndex = corpusListSt.Children.IndexOf(textList[txtObjIndex]);
+                            ChangeSelectTextObj(resultIndex);
+                            (corpusListSt.Children[resultIndex] as TextListObject).BringIntoView();
+                            break;
+                        }
+                        else if(comboIndex >= innerMaxCount - 1)
+                        {
+                            comboIndex = -1;
+                        }
+                    }
                     break;
                 }
                 else if (txtObjIndex >= maxCount-1)
                 {
                     txtObjIndex = -1;
                 }
-                else if (txtObjIndex == selectTextIndex)
+                else if (txtObjIndex == textList.IndexOf(currentTxtObj)-1 && currentTxtObj.TagText!="SAVE")
                 {
                     MessageBox.Show("저장해 둔 책갈피가 없습니다.");
                     break;
@@ -914,11 +963,41 @@ namespace CorpusTagging
                 DeleteTextBtnClick();
             }
 
+
+            else if(e.Key == Key.F11)
+            {
+                MovePrevTextFile();
+            }
+            else if(e.Key == Key.F12)
+            {
+                MoveNextTextFile();
+            }
+
         }
 
         private void removeTextFileBtn_Click(object sender, RoutedEventArgs e)
         {
+            for(int txtIndex=0;txtIndex<textList.Count;txtIndex++)
+            {
+                if(textList[txtIndex].SentenceName == selectedFileIndex)
+                {
+                    textList.RemoveAt(txtIndex);
+                    txtIndex--;
+                }
+            }
+            int selectIndex = corpusListCombo.SelectedIndex;
+            corpusComboList.RemoveAt(selectIndex);
+            corpusListCombo.ItemsSource = null;
+            corpusListCombo.ItemsSource = corpusComboList;
 
+            if (corpusComboList.Count <= 0)
+            {
+                selectedFileIndex = "";
+            }
+            else
+            {
+                MovePrevTextFile();
+            }
         }
 
         private void splitTextBtn_Click(object sender, RoutedEventArgs e)
